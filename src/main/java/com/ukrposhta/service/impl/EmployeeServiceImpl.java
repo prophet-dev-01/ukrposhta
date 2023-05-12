@@ -9,6 +9,7 @@ import com.ukrposhta.service.EmployeeService;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAll();
+    }
+
+    @Override
+    public List<Employee> findAll(PageRequest pageRequest) {
+        return employeeRepository.findAll(pageRequest).toList();
     }
 
     @Override

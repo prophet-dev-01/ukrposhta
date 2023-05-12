@@ -8,6 +8,7 @@ import com.ukrposhta.service.TeamService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,8 +32,10 @@ public class TeamController {
     }
 
     @GetMapping
-    public List<TeamResponseDto> findAll() {
-        return teamService.findAll()
+    public List<TeamResponseDto> findAll(@RequestParam(defaultValue = "20") Integer count,
+                                         @RequestParam(defaultValue = "0") Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, count);
+        return teamService.findAll(pageRequest)
                 .stream()
                 .map(teamMapper::toDto)
                 .collect(Collectors.toList());

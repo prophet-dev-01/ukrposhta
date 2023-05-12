@@ -3,6 +3,7 @@ package com.ukrposhta.service;
 import com.ukrposhta.model.Employee;
 import com.ukrposhta.model.Role;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
 
 public interface EmployeeService {
     Employee save(Employee employee);
@@ -12,6 +13,8 @@ public interface EmployeeService {
     Employee findById(Long id);
 
     List<Employee> findAll();
+
+    List<Employee> findAll(PageRequest pageRequest);
 
     List<Employee> findAllByIdIn(List<Long> employeeIds);
 

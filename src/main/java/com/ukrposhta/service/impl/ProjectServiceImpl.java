@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> findAll() {
         return projectRepository.findAll();
+    }
+
+    @Override
+    public List<Project> findAll(PageRequest pageRequest) {
+        return projectRepository.findAll(pageRequest).toList();
     }
 
     @Override

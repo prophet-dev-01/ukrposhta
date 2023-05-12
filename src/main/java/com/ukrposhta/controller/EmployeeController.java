@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +34,11 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeResponseDto> getAllEmployees() {
-        return employeeService.findAll()
+    public List<EmployeeResponseDto> getAllEmployees(
+            @RequestParam(defaultValue = "20") Integer count,
+            @RequestParam(defaultValue = "0") Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, count);
+        return employeeService.findAll(pageRequest)
                 .stream()
                 .map(employeeMapper::toDto)
                 .collect(Collectors.toList());

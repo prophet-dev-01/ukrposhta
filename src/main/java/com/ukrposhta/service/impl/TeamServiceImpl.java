@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -29,6 +30,11 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<Team> findAll() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public List<Team> findAll(PageRequest pageRequest) {
+        return teamRepository.findAll(pageRequest).toList();
     }
 
     @Override

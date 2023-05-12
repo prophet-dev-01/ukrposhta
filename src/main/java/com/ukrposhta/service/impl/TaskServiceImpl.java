@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findAll() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public List<Task> findAll(PageRequest pageRequest) {
+        return taskRepository.findAll(pageRequest).toList();
     }
 
     @Override

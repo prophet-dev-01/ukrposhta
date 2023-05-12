@@ -14,10 +14,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final EmployeeService employeeService;
     private final EmployeeMapper mapper;
 
-    public Employee register(Employee employee) {
-        return employeeService.save(employee);
-    }
-
     @Override
     public Employee register(EmployeeRequestDto requestDto) {
         Employee employee = mapper.toEntity(requestDto);

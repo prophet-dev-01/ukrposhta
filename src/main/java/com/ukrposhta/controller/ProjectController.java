@@ -9,10 +9,12 @@ import com.ukrposhta.model.dto.request.ProjectRequestDto;
 import com.ukrposhta.model.dto.response.ProjectResponseDto;
 import com.ukrposhta.model.dto.response.TeamResponseDto;
 import com.ukrposhta.service.ProjectService;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,6 +43,16 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ProjectResponseDto findById(@PathVariable Long id) {
         return projectMapper.toDto(projectService.findById(id));
+    }
+
+    @GetMapping
+    public List<ProjectResponseDto> findAll(@RequestParam(defaultValue = "20") Integer count,
+                                            @RequestParam(defaultValue = "0") Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, count);
+        return projectService.findAll(pageRequest)
+                .stream()
+                .map(projectMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("{id}/teams")
