@@ -6,6 +6,8 @@ import com.ukrposhta.model.Role;
 import com.ukrposhta.model.dto.request.EmployeeRequestDto;
 import com.ukrposhta.model.dto.response.EmployeeResponseDto;
 import com.ukrposhta.service.EmployeeService;
+import com.ukrposhta.util.PageRequestUtil;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -26,18 +28,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
+    private final PageRequestUtil pageRequestUtil;
 
     @PutMapping ("/{id}/role")
+    @ApiOperation(value = "add a new employee")
     public void addRole(@PathVariable Long id,
                         @RequestParam Role.RoleName roleName) {
         employeeService.addRole(id, roleName);
     }
 
     @GetMapping
+    @ApiOperation(value = "get employees list")
     public List<EmployeeResponseDto> getAllEmployees(
             @RequestParam(defaultValue = "20") Integer count,
-            @RequestParam(defaultValue = "0") Integer page) {
-        PageRequest pageRequest = PageRequest.of(page, count);
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        PageRequest pageRequest = pageRequestUtil
+                .getPageRequest(count, page, sortBy, "firstName", "level", "email");
         return employeeService.findAll(pageRequest)
                 .stream()
                 .map(employeeMapper::toDto)
@@ -45,11 +52,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/by-email")
+    @ApiOperation(value = "find employee by email")
     public EmployeeResponseDto findByEmail(@RequestParam String email) {
         return employeeMapper.toDto(employeeService.findByEmail(email));
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "update employee")
     public EmployeeResponseDto update(@PathVariable Long id,
                                       @Valid @RequestBody EmployeeRequestDto requestDto) {
         Employee employee = employeeMapper.toEntity(requestDto);
@@ -58,12 +67,14 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}/role")
+    @ApiOperation(value = "delete role from employee")
     public void deleteRole(@PathVariable Long id,
                            @RequestParam Role.RoleName roleName) {
         employeeService.deleteRole(id, roleName);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "delete employee")
     public void deleteById(@PathVariable Long id) {
         employeeService.deleteById(id);
     }

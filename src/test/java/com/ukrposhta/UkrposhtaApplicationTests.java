@@ -9,5 +9,4 @@ class UkrposhtaApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
